@@ -1,8 +1,14 @@
-# TalkOps Extension: Template NodeJS
+# TalkOps Extension: Timer
+![Docker Pulls](https://img.shields.io/docker/pulls/bierdok/talkops-timer)
 
 A TalkOps Extension made to work with [TalkOps](https://link.talkops.app/talkops).
 
-This Extension serves as a template designed to assist Node.js developers in effortlessly creating and integrating their own extensions.
+This Extension allows to manage timers **by voice in real-time**.
+
+## Features
+* Create a timer
+* Check timer states
+* Cancel a timer
 
 ## Installation Guide
 
@@ -19,8 +25,8 @@ name: talkops
 
 services:
 ...
-  talkops-extension-template-nodejs:
-    image: ghcr.io/talkops/talkops-template-nodejs
+  talkops-extension-timer:
+    image: bierdok/talkops-timer
     restart: unless-stopped
 ```
 

@@ -1,43 +1,49 @@
-import { Extension, Readme, Service } from "talkops";
+import { Alarm, Extension, Readme, Service } from "talkops";
 
-const extension = new Extension("Template NodeJS");
+const extension = new Extension("Timer");
 
-extension.setDockerRepository("ghcr.io/talkops/talkops-template-nodejs")
+extension.setDockerRepository("bierdok/talkops-timer");
 
 extension.setDescription(`
-This Extension serves as a template designed to assist Node.js developers in effortlessly creating and integrating their own extensions.
+This Extension allows to manage timers **by voice in real-time**.
+
+## Features
+* Create a timer
+* Check timer states
+* Cancel a timer
 `);
 
 extension.setInstructions(`
-You are an intelligent and efficient note-taking assistant.
-Your role is to help users capture, organize, and refine their notes effectively.
-Provide clear, concise, and structured responses while ensuring readability and usability.
-Adapt to the user's style and preferences to enhance their note-taking experience.
+You can manage timers.
 `);
 
 extension.setFunctionSchemas([
   {
-    name: "save_note",
-    description: "Save a note after confirmation",
+    name: "create_timer",
+    description: "Create a timer",
     parameters: {
       type: "object",
       properties: {
-        note: {
-          type: "string",
-          description: "The related note",
+        duration: {
+          type: "integer",
+          description: "The duration in milliseconds",
         },
       },
-      required: ["note"],
+      required: ["duration"],
     },
   },
 ]);
 
 extension.setFunctions([
-  function save_note(note) {
-    console.log(`Do something with: ${note}`);
+  function create_timer(duration, clientId) {
+    setTimeout(() => {
+      service.send(
+        new Alarm().setFrom(extension.name).addTo(clientId)
+      );
+    }, duration);
     return "Done.";
   },
 ]);
 
 new Readme(process.env.README_TEMPLATE_URL, "/app/README.md", extension);
-new Service(process.env.AGENT_URLS.split(","), extension);
+const service = new Service(process.env.AGENT_URLS.split(","), extension);
