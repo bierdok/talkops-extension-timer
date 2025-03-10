@@ -16,6 +16,7 @@ VOLUME [ "/app" ]
 
 FROM base
 COPY ecosystem.config.cjs index.mjs package.json ./
-COPY schemas schemas
 RUN npm install --omit=dev
+COPY schemas schemas
+COPY db.js ./
 USER node
