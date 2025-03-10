@@ -12,7 +12,7 @@ This Extension allows to manage timers **by voice in real-time**.
 ## Features
 * Create a timer
 * Check timer states
-* Cancel a timer
+* Delete a timer
 `)
 
 const baseInstructions = `
