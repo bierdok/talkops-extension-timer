@@ -1,5 +1,5 @@
 # TalkOps Extension: Timer
-![Docker Pulls](https://img.shields.io/docker/pulls/bierdok/talkops-timer)
+![Docker Pulls](https://img.shields.io/docker/pulls/bierdok/talkops-extension-timer)
 
 A TalkOps Extension made to work with [TalkOps](https://link.talkops.app/talkops).
 
@@ -26,7 +26,7 @@ name: talkops
 services:
 ...
   talkops-extension-timer:
-    image: bierdok/talkops-timer
+    image: bierdok/talkops-extension-timer
     volumes:
       - talkops-extension-timer_data:/data
     restart: unless-stopped

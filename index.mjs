@@ -3,7 +3,7 @@ import prettyMilliseconds from "pretty-ms";
 import yaml from "js-yaml";
 
 const extension = new Extension("Timer");
-extension.setDockerRepository("bierdok/talkops-timer");
+extension.setDockerRepository("bierdok/talkops-extension-timer");
 extension.enableDockerVolumeData();
 
 extension.setDescription(`
@@ -34,11 +34,7 @@ import create_timer from "./schemas/functions/create_timer.json" with { type: "j
 import get_timers from "./schemas/functions/get_timers.json" with { type: "json" };
 import cancel_timer from "./schemas/functions/cancel_timer.json" with { type: "json" };
 
-extension.setFunctionSchemas([
-  create_timer,
-  get_timers,
-  cancel_timer,
-]);
+extension.setFunctionSchemas([create_timer, get_timers, cancel_timer]);
 
 import { addTimer, removeTimer, getTimers } from "./db.js";
 
@@ -70,12 +66,15 @@ extension.setFunctions([
         return {
           number: timer.number,
           duration: prettyMilliseconds(timer.duration, {
-            verbose: true
-          }),
-          timeleft: prettyMilliseconds(timer.completeAt - new Date().getTime(), {
             verbose: true,
-            separateMilliseconds: true,
           }),
+          timeleft: prettyMilliseconds(
+            timer.completeAt - new Date().getTime(),
+            {
+              verbose: true,
+              separateMilliseconds: true,
+            }
+          ),
         };
       })
     );
