@@ -1,0 +1,14 @@
+{
+  "name": "cancel_timer",
+  "description": "Cancel a timer.",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "number": {
+        "type": "integer",
+        "description": "The number of the timer."
+      }
+    },
+    "required": ["number"]
+  }
+}

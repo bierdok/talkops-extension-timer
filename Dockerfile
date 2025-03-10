@@ -1,7 +1,7 @@
 FROM node:23.9-slim AS base
 ENV NODE_NO_WARNINGS=1
 RUN npm install -g pm2
-RUN mkdir /app && chown node:node /app
+RUN mkdir /app && mkdir /data && chown node:node /app && chown node:node /data
 ENV AGENT_URLS=ws://talkops
 ENV README_TEMPLATE_URL=https://d8bee12e.talkops.app/readme.ejs
 CMD ["pm2-runtime", "ecosystem.config.cjs" ]
@@ -16,5 +16,6 @@ VOLUME [ "/app" ]
 
 FROM base
 COPY ecosystem.config.cjs index.js package.json ./
+COPY schemas schemas
 RUN npm install --omit=dev
 USER node

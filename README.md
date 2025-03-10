@@ -27,7 +27,14 @@ services:
 ...
   talkops-extension-timer:
     image: bierdok/talkops-timer
+    volumes:
+      - talkops-extension-timer_data:/data
     restart: unless-stopped
+
+volumes:
+...
+  talkops-extension-timer_data: ~
+
 ```
 
 ## Environment Variables
