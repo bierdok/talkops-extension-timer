@@ -1,5 +1,5 @@
 {
-  "name": "cancel_timer",
+  "name": "delete_timer",
   "description": "Cancel a timer.",
   "parameters": {
     "type": "object",

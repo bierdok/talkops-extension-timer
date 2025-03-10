@@ -1,4 +1,4 @@
-import { Alarm, Extension, Readme, Service } from "talkops";
+import { Alarm, Extension, Notification, Readme, Service } from "talkops";
 import prettyMilliseconds from "pretty-ms";
 import yaml from "js-yaml";
 
@@ -32,9 +32,9 @@ extension.setInstructions(() => {
 
 import create_timer from "./schemas/functions/create_timer.json" with { type: "json" };
 import get_timers from "./schemas/functions/get_timers.json" with { type: "json" };
-import cancel_timer from "./schemas/functions/cancel_timer.json" with { type: "json" };
+import delete_timer from "./schemas/functions/delete_timer.json" with { type: "json" };
 
-extension.setFunctionSchemas([create_timer, get_timers, cancel_timer]);
+extension.setFunctionSchemas([create_timer, get_timers, delete_timer]);
 
 import { addTimer, removeTimer, getTimers } from "./db.js";
 
@@ -58,7 +58,7 @@ extension.setFunctions([
     const createdAt = new Date().getTime();
     const completeAt = createdAt + duration;
     addTimer({ number, createdAt, completeAt, duration, clientId });
-    return "Done.";
+    return `The timer ${number} has been created.`;
   },
   function get_timers(clientId) {
     return yaml.dump(
@@ -79,11 +79,11 @@ extension.setFunctions([
       })
     );
   },
-  function cancel_timer(number, clientId) {
+  function delete_timer(number, clientId) {
     for (const timer of getClientTimers(clientId)) {
       if (timer.number !== number) continue;
       removeTimer(timer);
-      return "Done.";
+      return `The timer ${number} has been deleted.`;
     }
     return "Not found.";
   },
@@ -94,7 +94,13 @@ setInterval(() => {
   for (const timer of getTimers()) {
     if (timer.completeAt > now) continue;
     removeTimer(timer);
-    service.send(new Alarm().setFrom(extension.name).addTo(timer.clientId));
+    service.send([
+      new Alarm().setFrom(extension.name).addTo(timer.clientId),
+      new Notification()
+        .setFrom(extension.name)
+        .addTo(timer.clientId)
+        .setText(`The timer ${timer.number} is complete.`),
+    ]);
   }
 }, 1000);
 
